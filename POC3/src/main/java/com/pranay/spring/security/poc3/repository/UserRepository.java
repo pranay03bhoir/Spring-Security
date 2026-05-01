@@ -1,0 +1,11 @@
+package com.pranay.spring.security.poc3.repository;
+
+import com.pranay.spring.security.poc3.models.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<User,Long> {
+
+    Optional<User> findByUsername(String username);
+}
