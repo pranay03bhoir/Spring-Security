@@ -25,7 +25,8 @@ public class SecurityConfig {
 //                                .permitAll()
 //                                .hasAuthority("USER")
 //                                 .hasAnyAuthority("read", "write")
-                                        .hasRole("ADMIN")
+//                                        .hasRole("ADMIN")
+                                        .hasAnyRole("USER", "ADMIN")
 
                 )
                 .build();
