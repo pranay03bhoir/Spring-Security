@@ -2,8 +2,10 @@ package com.pranay.spring.security.poc4.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +22,7 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(request ->
                                 request
@@ -30,7 +33,10 @@ public class SecurityConfig {
 //                                        .hasAnyRole("USER", "ADMIN")
 //                                        .access(new WebExpressionAuthorizationManager(expression))
                                         .requestMatchers("/status").permitAll()
-                                        .anyRequest().denyAll()
+                                        .requestMatchers(HttpMethod.GET, "/test/**").hasRole("USER")
+                                        .requestMatchers(HttpMethod.POST, "/test/**").hasRole("ADMIN")
+                                        .anyRequest().authenticated()
+//                                        .anyRequest().denyAll()
                 )
                 .build();
     }
@@ -43,13 +49,13 @@ public class SecurityConfig {
                 .withUsername("pranay")
                 .password("pranay123")
                 .authorities("read")
-//                .roles("USER")
+                .roles("USER")
                 .build();
         UserDetails userDetailsObj2 = User
                 .withUsername("manisha")
                 .password("manisha123")
                 .authorities("write")
-//                .roles("ADMIN")
+                .roles("ADMIN")
                 .build();
         inMemoryUserDetailsManager.createUser(userDetailsObj1);
         inMemoryUserDetailsManager.createUser(userDetailsObj2);
