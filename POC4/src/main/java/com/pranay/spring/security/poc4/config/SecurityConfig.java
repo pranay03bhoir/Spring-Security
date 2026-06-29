@@ -24,7 +24,7 @@ public class SecurityConfig {
                                         .anyRequest()
 //                                .permitAll()
 //                                .hasAuthority("USER")
-                                        .hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                                        .hasAnyAuthority("read", "write")
                 )
                 .build();
     }
@@ -36,12 +36,12 @@ public class SecurityConfig {
         UserDetails userDetailsObj1 = User
                 .withUsername("pranay")
                 .password("pranay123")
-                .authorities("ROLE_USER")
+                .authorities("read")
                 .build();
         UserDetails userDetailsObj2 = User
                 .withUsername("manisha")
                 .password("manisha123")
-                .authorities("ROLE_ADMIN")
+                .authorities("write")
                 .build();
         inMemoryUserDetailsManager.createUser(userDetailsObj1);
         inMemoryUserDetailsManager.createUser(userDetailsObj2);
