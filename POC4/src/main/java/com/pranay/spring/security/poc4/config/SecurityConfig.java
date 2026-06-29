@@ -22,7 +22,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request ->
                         request
                                 .anyRequest()
-                                .authenticated())
+                                .permitAll())
                 .build();
     }
 
