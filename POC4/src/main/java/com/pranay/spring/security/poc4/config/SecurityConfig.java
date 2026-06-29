@@ -20,21 +20,32 @@ public class SecurityConfig {
         return httpSecurity
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(request ->
-                        request
-                                .anyRequest()
-                                .hasAuthority("USER"))
+                                request
+                                        .anyRequest()
+//                                .permitAll()
+//                                .hasAuthority("USER")
+                                        .hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+                )
                 .build();
     }
 
 
     @Bean
     UserDetailsService userDetailsService() {
-        UserDetails userDetails = User
+        InMemoryUserDetailsManager inMemoryUserDetailsManager = new InMemoryUserDetailsManager();
+        UserDetails userDetailsObj1 = User
                 .withUsername("pranay")
                 .password("pranay123")
-                .authorities("USER")
+                .authorities("ROLE_USER")
                 .build();
-        return new InMemoryUserDetailsManager(userDetails);
+        UserDetails userDetailsObj2 = User
+                .withUsername("manisha")
+                .password("manisha123")
+                .authorities("ROLE_ADMIN")
+                .build();
+        inMemoryUserDetailsManager.createUser(userDetailsObj1);
+        inMemoryUserDetailsManager.createUser(userDetailsObj2);
+        return inMemoryUserDetailsManager;
     }
 
     @Bean
