@@ -15,19 +15,22 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
+    String expression = "isAuthenticated() and hasAuthority('read') or hasAuthority('write')";
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(request ->
                                 request
-                                        .anyRequest()
-//                                .permitAll()
+//                                        .anyRequest().permitAll()
 //                                .hasAuthority("USER")
 //                                 .hasAnyAuthority("read", "write")
 //                                        .hasRole("ADMIN")
-                                        .hasAnyRole("USER", "ADMIN")
-
+//                                        .hasAnyRole("USER", "ADMIN")
+//                                        .access(new WebExpressionAuthorizationManager(expression))
+                                        .requestMatchers("/status").permitAll()
+                                        .anyRequest().denyAll()
                 )
                 .build();
     }
@@ -39,14 +42,14 @@ public class SecurityConfig {
         UserDetails userDetailsObj1 = User
                 .withUsername("pranay")
                 .password("pranay123")
-//                .authorities("read")
-                .roles("USER")
+                .authorities("read")
+//                .roles("USER")
                 .build();
         UserDetails userDetailsObj2 = User
                 .withUsername("manisha")
                 .password("manisha123")
-//                .authorities("write")
-                .roles("ADMIN")
+                .authorities("write")
+//                .roles("ADMIN")
                 .build();
         inMemoryUserDetailsManager.createUser(userDetailsObj1);
         inMemoryUserDetailsManager.createUser(userDetailsObj2);
