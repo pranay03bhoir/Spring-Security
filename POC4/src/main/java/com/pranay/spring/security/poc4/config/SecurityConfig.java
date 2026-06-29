@@ -22,7 +22,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request ->
                         request
                                 .anyRequest()
-                                .permitAll())
+                                .hasAuthority("USER"))
                 .build();
     }
 
@@ -32,7 +32,7 @@ public class SecurityConfig {
         UserDetails userDetails = User
                 .withUsername("pranay")
                 .password("pranay123")
-                .roles("USER")
+                .authorities("USER")
                 .build();
         return new InMemoryUserDetailsManager(userDetails);
     }
