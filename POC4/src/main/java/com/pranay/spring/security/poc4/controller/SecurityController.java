@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SecurityController {
 
-    @GetMapping("/test")
+    @GetMapping("/testMe")
     public String testDemoPoint() {
         SecurityContextHolder
                 .getContext()
@@ -19,7 +19,7 @@ public class SecurityController {
         return "GET - Pranay Bhoir";
     }
 
-    @PostMapping("/test")
+    @PostMapping("/testMe/v1")
     public String testDemoPointPost() {
         SecurityContextHolder
                 .getContext()
